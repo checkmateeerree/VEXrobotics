@@ -75,9 +75,9 @@ void opcontrol(void);
 
 #ifdef __cplusplus
 #include "subsystemHeaders/drive.hpp"
-#include "subsystemHeaders/lift.hpp"
+#include "subsystemHeaders/shooter.hpp"
+#include "subsystemHeaders/shifter.hpp"
 #include "subsystemHeaders/intake.hpp"
-#include "subsystemHeaders/angler.hpp"
 #include "subsystemHeaders/globals.hpp"
 
 /**

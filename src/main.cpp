@@ -1,7 +1,9 @@
 #include <string>
 #include "main.h"
+#include "pros/motors.h"
 using namespace std;
 
+#define MOTOR_MAX_SPEED 100
 /**
  * A callback function for LLEMU's center button.
  *
@@ -63,28 +65,24 @@ void competition_initialize() {
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {
-	pros::Motor left_wheels (19);
-	pros::Motor right_wheels (20, true);
-	pros::Distance distanceSensor (6);
-	int dist = distanceSensor.get();
-	int position = 1000;
-	while (true){	
-	//	cout << dist;
-		dist = distanceSensor.get();
-		pros::lcd::set_text(2, to_string(position));
-		right_wheels.move_relative(position, 1000);
-		left_wheels.move_relative(position, 1000);
-		pros::delay(2);
-	}
 
-	//cout << 
-	
-	
-	// This will move 1000 ticks forward
-	//drive_left.move_relative(1000, 10);
-	// This moves an additional 1000 ticks forward
-	//drive_left.move_absolute(1000, 10);
+void redLeftCorner(){
+	//driveForward(500);
+
+}
+
+
+
+
+void autonomous() {
+	//
+	//redLeftCorner();
+	//redRightCorner();
+	//blueLeftCorner();
+	//blueRightCorner();
+
+	return;
+
 }
 
 /**
@@ -101,8 +99,22 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	
-}
+	pros::Motor left_wheels (19);
+	pros::Motor right_wheels (20, true);
+	pros::Controller master (CONTROLLER_MASTER);
+	pros::Motor shooterLeft (1, MOTOR_GEAR_BLUE);
+	pros::Motor shooterRight (12, MOTOR_GEAR_BLUE, true);
+	//pros::Vision vision_sensor (15);
+	while (true){
+		setDriveMotors();
+		setIntakeMotors();
+		setShootMotor();
+		setShiftMotor();
+		//pros::vision_object_s_t rtn = vision_sensor.get_by_sig(0,1);
+			
+		pros::delay(2);
+	}
+}	
 
 int main(){
 	

@@ -5,8 +5,9 @@
 //MOOTRS
 extern pros::Motor shifter;
 extern pros::Motor shooter;
-extern pros::Motor intakeLeft;
-extern pros::Motor intakeRight;
+extern pros::Motor shooter2;
+extern pros::Motor intake;
+//extern pros::Motor intakeRight;
 extern pros::Motor driveLeftBack;
 extern pros::Motor driveLeftFront;
 extern pros::Motor driveRightBack;
@@ -18,3 +19,4 @@ extern pros::Controller controller;
 
 //MISCELLANEOUS
 //#define ANGLER_POT_VERTICAL 3000
+extern pros::Imu imu_sensor;

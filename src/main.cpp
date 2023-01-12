@@ -3,7 +3,6 @@
 #include "pros/motors.h"
 using namespace std;
 
-#define MOTOR_MAX_SPEED 100
 /**
  * A callback function for LLEMU's center button.
  *
@@ -28,10 +27,23 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
+	pros::lcd::set_text(1, "yo whats good");
 
-	pros::lcd::register_btn1_cb(on_center_button);
-	autonomous();
+	driveLeftBack.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+	driveLeftFront.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+	driveRightBack.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+	driveRightFront.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+
+	intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	//intakeRight.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	shifter.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	shooter.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+
+	imu_sensor.reset();
+	
+
+	//pros::ADIGyro gyro('B', 0.91);
+	pros::delay(2000);
 }
 
 /**
@@ -67,16 +79,20 @@ void competition_initialize() {
  */
 
 void redLeftCorner(){
-	//driveForward(500);
+	translate(-500, 80);
 
 }
 
 
-
-
 void autonomous() {
-	//
 	//redLeftCorner();
+	pros::ADIDigitalOut piston ('H');
+
+	piston.set_value(true);
+	pros::delay(1000);
+	piston.set_value(false);
+	//pros::lcd::set_text(1, "ran auto");
+
 	//redRightCorner();
 	//blueLeftCorner();
 	//blueRightCorner();
@@ -99,24 +115,46 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::Motor left_wheels (19);
-	pros::Motor right_wheels (20, true);
-	pros::Controller master (CONTROLLER_MASTER);
-	pros::Motor shooterLeft (1, MOTOR_GEAR_BLUE);
-	pros::Motor shooterRight (12, MOTOR_GEAR_BLUE, true);
+	//pros::lcd::set_text(1, to_string(imu_sensor.get_rotation()));
+	autonomous();
 	//pros::Vision vision_sensor (15);
+	
+	pros::Vision vision_sensor (2);
+  	vision_sensor.clear_led();
+
+	pros::vision_signature_s_t RED_SIG = 
+		pros::Vision::signature_from_utility(1, 7631, 10241, 8936, -1921, -353, -1138, 3.000, 0);
+	pros::vision_signature_s_t BLUE_SIG = 
+		pros::Vision::signature_from_utility(2, -2897, -1939, -2418, 10493, 13335, 11914, 3.000, 0);
+	pros::vision_signature_s_t YELLOW_SIG = 
+		pros::Vision::signature_from_utility(3, 1655, 2063, 1859, -4605, -4257, -4431, 3.000, 0);
+	//vision::signature SIG_1 (1, 7631, 10241, 8936, -1921, -353, -1138, 3.000, 0); vision::signature SIG_2 (2, -2897, -1939, -2418, 10493, 13335, 11914, 3.000, 0); vision::signature SIG_3 (3, 1655, 2063, 1859, -4605, -4257, -4431, 3.000, 0); vision::signature SIG_4 (4, 0, 0, 0, 0, 0, 0, 3.000, 0); vision::signature SIG_5 (5, 0, 0, 0, 0, 0, 0, 3.000, 0); vision::signature SIG_6 (6, 0, 0, 0, 0, 0, 0, 3.000, 0); vision::signature SIG_7 (7, 0, 0, 0, 0, 0, 0, 3.000, 0); vex::vision vision1 ( vex::PORT1, 50, SIG_1, SIG_2, SIG_3, SIG_4, SIG_5, SIG_6, SIG_7 );
+
+	vision_sensor.set_signature(1, &RED_SIG);
+	vision_sensor.set_signature(2, &BLUE_SIG);
+	vision_sensor.set_signature(3, &YELLOW_SIG);
+	
 	while (true){
+
+		pros::vision_object_s_t rtn = vision_sensor.get_by_sig(0, 1);
+		///pros::lcd::set_text(2, to_string(pros::Vision::print_signature(vision_sensor.get_signature(1))));
+
+		std::cout <<"count: " << rtn.signature << std::endl;
+		//if (rtn.signature == 255) std::cout << " " << errno;
 		setDriveMotors();
 		setIntakeMotors();
 		setShootMotor();
 		setShiftMotor();
+		//pros::lcd::set_text(1, to_string(imu_sensor.get_rotation()));
 		//pros::vision_object_s_t rtn = vision_sensor.get_by_sig(0,1);
 			
-		pros::delay(2);
+		//pros::delay(10);
+		pros::delay(1000);
 	}
 }	
 
+
+
 int main(){
-	
 	return 0;
 }

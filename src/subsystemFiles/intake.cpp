@@ -2,8 +2,8 @@
 
 //HELPER FUNCTIONS
 void setIntake(int power){
-    intakeLeft = power;
-    intakeRight = power;
+    intake = power;
+    //intakeRight = power;
 }
 
 //DRIVER CONTROL FUNCTIONS

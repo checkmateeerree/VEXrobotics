@@ -4,33 +4,28 @@ pros::ADIGyro gyro('B', 0.91);
 #define horiz_speed 75
 
 //HELPER FUNCTIONS
-void setDrive(int left, int right, int horiz1,int horiz2) {
+void setDrive(int left, int right) {
+	driveLeftBack = left;
+	driveLeftFront = left;
+	driveRightBack = right;
+	driveRightFront = right;
+}
 
+void setHorizDrive(int horiz1,int horiz2){
 	if (abs(horiz1) > 0){
-		//leftward motion
-		pros::lcd::set_text(1, "works left");
+		std::cout << "going left";
 		driveLeftBack = horiz_speed;
 		driveLeftFront = -horiz_speed - 5;
 		driveRightBack = -horiz_speed;
 		driveRightFront = horiz_speed;
 	}
-	else if (abs(horiz2) > 0){
-		//rightward motion
-		pros::lcd::set_text(1, "works right");
+	if (abs(horiz2) > 0){
+		std::cout << "going right";
 		driveLeftBack = -horiz_speed;
 		driveLeftFront = horiz_speed;
 		driveRightBack = horiz_speed;
 		driveRightFront = -horiz_speed - 5;
 	}
-	else {
-		//no horizontal motion
-
-		driveLeftBack = left;
-		driveLeftFront = left;
-		driveRightBack = right;
-		driveRightFront = right;
-	}
-    
 }
 
 void resetDriveEncoders(){
@@ -60,30 +55,107 @@ void setDriveMotors() {
     if (abs(rightJoystick) < 10)
         rightJoystick = 0;
 	
-	pros::lcd::set_text(1, "uploaded");
-    setDrive(leftJoystick, rightJoystick, leftButton, rightButton);
+	if (abs(leftButton) > 0 || abs(rightButton) > 0){
+		setHorizDrive(leftButton, rightButton);
+	} else {
+		//int left = leftJoystick + rightJoystick;
+		//int right = leftJoystick - rightJoystick;
+
+		//arcade
+		//setDrive(left, right);
+		//tank
+		setDrive(leftJoystick, rightJoystick);
+	}
+
+	
 }
 
 
+//autonomous
 void translate(int units, int voltage) {
 	//define direction based on units provided
 	int direction = abs(units) / units; //either 1 or -1;
 
 	//RESET MOTOR ENCODERS
 	resetDriveEncoders();
-	imu_sensor.reset();
+	imu_sensor.tare_rotation();
+
+	//std::cout<< "hello";
 
 	//DRIVE FORWARD TILL UNITS ARE REACHED
 
 	while (avgDriveEncoderValue() < abs(units)){
-		setDrive(voltage * direction - imu_sensor.get_rotation(), voltage * direction + imu_sensor.get_rotation(), 0, 0);
+		//std::cout << imu_sensor.get_rotation();
+		//pros::lcd::set_text(1, std::to_string(imu_sensor.get_rotation()));
+		if (direction == 1){
+			setDrive(voltage * direction - imu_sensor.get_rotation(), voltage * direction + imu_sensor.get_rotation());
+		} else {
+			setDrive(voltage * direction + imu_sensor.get_rotation(), voltage * direction - imu_sensor.get_rotation());
+		}
+		
 		pros::delay(10);
 	}
 
 	//BRIEF BRAKE
-	setDrive(-10 * direction, -10 * direction, 0, 0);
+	setDrive(-10 * direction, -10 * direction);
 	pros::delay(50);
 
 	//SET DRIVE BACK TO NEUTRAL
-	setDrive(0, 0, 0, 0);
+	setDrive(0, 0);
+}
+
+void translateHorizontal(int units, int voltage){
+	int direction = abs(units) / units;
+
+	resetDriveEncoders();
+	imu_sensor.tare_rotation();
+
+	if (direction == 1){
+			setHorizDrive(1, 0);
+	} else {
+		setHorizDrive(0, 1);
+	}
+
+	while (avgDriveEncoderValue() < abs(units)){
+		pros::delay(10);
+	}
+
+	setHorizDrive(0, 0);
+}
+
+void rotate(int degrees, int voltage){
+	//define direction, based on units provided
+	int direction = abs(degrees) / degrees;
+	//reset gyro
+	imu_sensor.tare_rotation();
+	//turn until units are reached
+	setDrive(voltage * direction, -voltage * direction);
+	while (fabs(imu_sensor.get_rotation()) < abs(degrees) - 5){
+		//setDrive(-voltage * direction, voltage * direction, 0, 0);
+		pros::delay(10);
+	}
+
+	setDrive(-voltage * direction, voltage * direction);
+	//brief break
+	pros::delay(100);
+
+	//if you overshot the rotation
+	if (fabs(imu_sensor.get_rotation()) > abs(degrees)){
+		setDrive(0.5 * -voltage * direction, 0.5 * voltage * direction);
+		while(fabs(imu_sensor.get_rotation()) > abs(degrees)){
+			pros::delay(10);
+		}
+	}
+	
+	//if you undershot the rotation
+	if (fabs(imu_sensor.get_rotation()) < abs(degrees)){
+		setDrive(0.5 * voltage * direction, 0.5 * -voltage * direction);
+		while(fabs(imu_sensor.get_rotation()) > abs(degrees)){
+			pros::delay(10);
+		}
+	}
+
+	//setDrive(10 * direction, -10 * direction, 0, 0);
+	//reset drive to zero
+	setDrive(0, 0);
 }

@@ -78,27 +78,109 @@ void competition_initialize() {
  * from where it left off.
  */
 
+void autonShoot(){
+	//shoots
+	setShooter(127);
+	pros::delay(2500);
+	for (int i = 0; i < 2; i++){
+		setShifter(70);
+		pros::delay(300);
+		setShifter(-70);
+		pros::delay(300);
+	}
+	setShooter(0);
+	setShifter(0);
+}
+
+void spinRoller(){
+	setDrive(50, 50);
+	//translate(300, 70);
+	pros::delay(100);
+	//spin roller
+	setIntake(-127);
+	pros::delay(1000);
+	setIntake(0);
+
+	setDrive(0, 0);
+	pros::delay(10);
+}
+
+
+void blueLeftCorner(){
+	//robot allowed to be in front of roller
+	//permute to roller
+	spinRoller();
+	pros::delay(10);
+	//back up
+	translate(-100, 70);
+	pros::delay(50);
+	//rotate it
+	rotate(90, 60);
+	translate(-200, 70);
+
+	autonShoot();
+	//translateHorizontal(500, 50);
+	//positive is left, negative is right
+}
+
+void redRightCorner(){
+	autonShoot();
+
+	pros::delay(100);
+	rotate(90, 60);
+
+	pros::delay(100);
+	translateHorizontal(-1000, 80);
+	pros::delay(300);
+	spinRoller();
+	//setIntake(100);
+}
+
 void redLeftCorner(){
-	translate(-500, 80);
+	//robot allowed to be in front of roller
+	//permute to roller
+	spinRoller();
+	//back up
+	translate(-100, 70);
+	pros::delay(50);
+	//rotate it
+	rotate(90, 60);
+	translate(-200, 70);
+
+	autonShoot();
+
+	//translateHorizontal(500, 50);
+	
+	//positive is left, negative is right
+}
+
+void blueRightCorner(){
+	autonShoot();
+
+	pros::delay(100);
+	rotate(90, 60);
+
+	pros::delay(100);
+	translateHorizontal(-1000, 80);
+	pros::delay(300);
+	spinRoller();
 
 }
 
 
 void autonomous() {
 	//redLeftCorner();
-	pros::ADIDigitalOut piston ('H');
+	//redRightCorner();
+	blueRightCorner();
+	//blueLeftCorner();
+
+	/*pros::ADIDigitalOut piston ('H');
 
 	piston.set_value(true);
 	pros::delay(1000);
-	piston.set_value(false);
+	piston.set_value(false);*/
 	//pros::lcd::set_text(1, "ran auto");
-
-	//redRightCorner();
-	//blueLeftCorner();
-	//blueRightCorner();
-
 	return;
-
 }
 
 /**
@@ -119,7 +201,7 @@ void opcontrol() {
 	autonomous();
 	//pros::Vision vision_sensor (15);
 	
-	pros::Vision vision_sensor (2);
+	/*pros::Vision vision_sensor (2);
   	vision_sensor.clear_led();
 
 	pros::vision_signature_s_t RED_SIG = 
@@ -132,15 +214,10 @@ void opcontrol() {
 
 	vision_sensor.set_signature(1, &RED_SIG);
 	vision_sensor.set_signature(2, &BLUE_SIG);
-	vision_sensor.set_signature(3, &YELLOW_SIG);
+	vision_sensor.set_signature(3, &YELLOW_SIG);*/
 	
 	while (true){
-
-		pros::vision_object_s_t rtn = vision_sensor.get_by_sig(0, 1);
-		///pros::lcd::set_text(2, to_string(pros::Vision::print_signature(vision_sensor.get_signature(1))));
-
-		std::cout <<"count: " << rtn.signature << std::endl;
-		//if (rtn.signature == 255) std::cout << " " << errno;
+		
 		setDriveMotors();
 		setIntakeMotors();
 		setShootMotor();
@@ -148,13 +225,8 @@ void opcontrol() {
 		//pros::lcd::set_text(1, to_string(imu_sensor.get_rotation()));
 		//pros::vision_object_s_t rtn = vision_sensor.get_by_sig(0,1);
 			
-		//pros::delay(10);
-		pros::delay(1000);
+		pros::delay(10);
+		//pros::delay(1000);
 	}
 }	
 
-
-
-int main(){
-	return 0;
-}

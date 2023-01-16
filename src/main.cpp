@@ -41,8 +41,6 @@ void initialize() {
 
 	imu_sensor.reset();
 	
-
-	//pros::ADIGyro gyro('B', 0.91);
 	pros::delay(2000);
 }
 

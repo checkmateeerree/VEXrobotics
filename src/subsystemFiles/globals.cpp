@@ -8,6 +8,9 @@
 #define DRIVE_RIGHT_BACK_PORT 7
 #define DRIVE_RIGHT_FRONT_PORT 8
 #define IMU_PORT 10
+#define VISION_PORT 20
+#define OPTICAL_PORT 12
+#define DISTANCE_PORT 19
 
 //MOTORS
 pros::Motor shifter(SHIFTER_PORT, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_COUNTS);
@@ -21,6 +24,8 @@ pros::Motor driveRightFront(DRIVE_RIGHT_FRONT_PORT, pros::E_MOTOR_GEARSET_18, tr
 //CONTROLLER
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-//IMU
+//SENSORS
 pros::Imu imu_sensor(IMU_PORT);
-
+pros::Vision vision_sensor(VISION_PORT);
+pros::Optical optical_sensor(OPTICAL_PORT);
+pros::Distance distance_sensor(DISTANCE_PORT);

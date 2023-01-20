@@ -1,0 +1,7 @@
+implement gyro driving for horizontal driving - done
+
+implement vision sensor to track goal
+
+implement distance sensor to detect distance from goal
+
+implement optical sensor to detect roller color

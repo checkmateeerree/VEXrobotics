@@ -16,6 +16,8 @@ extern pros::Motor driveRightFront;
 //CONTROLLER
 extern pros::Controller controller;
 
-//MISCELLANEOUS
-//#define ANGLER_POT_VERTICAL 3000
+//MISCELLANEOUS/sensors
 extern pros::Imu imu_sensor;
+extern pros::Vision vision_sensor;
+extern pros::Optical optical_sensor;
+extern pros::Distance distance_sensor;

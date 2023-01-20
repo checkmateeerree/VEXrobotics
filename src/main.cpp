@@ -40,6 +40,20 @@ void initialize() {
 	shooter.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 
 	imu_sensor.reset();
+
+	vision_sensor.clear_led();
+
+	pros::vision_signature_s_t RED_SIG = 
+		pros::Vision::signature_from_utility(1, 7631, 10241, 8936, -1921, -353, -1138, 3.000, 0);
+	pros::vision_signature_s_t BLUE_SIG = 
+		pros::Vision::signature_from_utility(2, -2897, -1939, -2418, 10493, 13335, 11914, 3.000, 0);
+	pros::vision_signature_s_t YELLOW_SIG = 
+		pros::Vision::signature_from_utility(3, 1655, 2063, 1859, -4605, -4257, -4431, 3.000, 0);
+	//vision::signature SIG_1 (1, 7631, 10241, 8936, -1921, -353, -1138, 3.000, 0); vision::signature SIG_2 (2, -2897, -1939, -2418, 10493, 13335, 11914, 3.000, 0); vision::signature SIG_3 (3, 1655, 2063, 1859, -4605, -4257, -4431, 3.000, 0); vision::signature SIG_4 (4, 0, 0, 0, 0, 0, 0, 3.000, 0); vision::signature SIG_5 (5, 0, 0, 0, 0, 0, 0, 3.000, 0); vision::signature SIG_6 (6, 0, 0, 0, 0, 0, 0, 3.000, 0); vision::signature SIG_7 (7, 0, 0, 0, 0, 0, 0, 3.000, 0); vex::vision vision1 ( vex::PORT1, 50, SIG_1, SIG_2, SIG_3, SIG_4, SIG_5, SIG_6, SIG_7 );
+
+	vision_sensor.set_signature(1, &RED_SIG);
+	vision_sensor.set_signature(2, &BLUE_SIG);
+	vision_sensor.set_signature(3, &YELLOW_SIG);
 	
 	pros::delay(2000);
 }
@@ -77,7 +91,7 @@ void competition_initialize() {
  */
 
 void autonShoot(){
-	//shoots
+	//shoots two discs into low goal
 	setShooter(127);
 	pros::delay(2500);
 	for (int i = 0; i < 2; i++){
@@ -91,6 +105,8 @@ void autonShoot(){
 }
 
 void spinRoller(){
+	//spins the roller 
+
 	setDrive(50, 50);
 	//translate(300, 70);
 	pros::delay(100);
@@ -195,34 +211,14 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	//pros::lcd::set_text(1, to_string(imu_sensor.get_rotation()));
-	autonomous();
-	//pros::Vision vision_sensor (15);
-	
-	/*pros::Vision vision_sensor (2);
-  	vision_sensor.clear_led();
-
-	pros::vision_signature_s_t RED_SIG = 
-		pros::Vision::signature_from_utility(1, 7631, 10241, 8936, -1921, -353, -1138, 3.000, 0);
-	pros::vision_signature_s_t BLUE_SIG = 
-		pros::Vision::signature_from_utility(2, -2897, -1939, -2418, 10493, 13335, 11914, 3.000, 0);
-	pros::vision_signature_s_t YELLOW_SIG = 
-		pros::Vision::signature_from_utility(3, 1655, 2063, 1859, -4605, -4257, -4431, 3.000, 0);
-	//vision::signature SIG_1 (1, 7631, 10241, 8936, -1921, -353, -1138, 3.000, 0); vision::signature SIG_2 (2, -2897, -1939, -2418, 10493, 13335, 11914, 3.000, 0); vision::signature SIG_3 (3, 1655, 2063, 1859, -4605, -4257, -4431, 3.000, 0); vision::signature SIG_4 (4, 0, 0, 0, 0, 0, 0, 3.000, 0); vision::signature SIG_5 (5, 0, 0, 0, 0, 0, 0, 3.000, 0); vision::signature SIG_6 (6, 0, 0, 0, 0, 0, 0, 3.000, 0); vision::signature SIG_7 (7, 0, 0, 0, 0, 0, 0, 3.000, 0); vex::vision vision1 ( vex::PORT1, 50, SIG_1, SIG_2, SIG_3, SIG_4, SIG_5, SIG_6, SIG_7 );
-
-	vision_sensor.set_signature(1, &RED_SIG);
-	vision_sensor.set_signature(2, &BLUE_SIG);
-	vision_sensor.set_signature(3, &YELLOW_SIG);*/
+	//autonomous();
 	
 	while (true){
-		
 		setDriveMotors();
 		setIntakeMotors();
 		setShootMotor();
 		setShiftMotor();
-		//pros::lcd::set_text(1, to_string(imu_sensor.get_rotation()));
-		//pros::vision_object_s_t rtn = vision_sensor.get_by_sig(0,1);
-			
+
 		pros::delay(10);
 		//pros::delay(1000);
 	}

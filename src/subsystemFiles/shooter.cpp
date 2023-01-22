@@ -13,8 +13,6 @@ void setShootMotor(){
     //bottom trigger intakes, top trigger outtakes
     int buttonVal = controller.get_digital(pros::E_CONTROLLER_DIGITAL_X);
     int shooterPower = 90 * (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1));
-    pros::vision_object_s_t object_arr[1];
-    vision_sensor.read_by_size(0, 1, object_arr);
 
     if (buttonVal > 0 && isToggled){
         //if button is being pressed and
@@ -25,15 +23,21 @@ void setShootMotor(){
         //and toggle is not true
         isToggled = true;
     }
-
     if (isToggled || shooterPower > 0){
-        setShooter(90);
+        //setShooter(90);
 
-        if (object_arr[0].signature == 1 || object_arr[0].signature == 2){
-            int width = alignRobot(object_arr);
-            //automatic set shooter
-            
+        int width = alignRobot();
+        int dist = findDist();
+
+        if (width != -1){
+            setShooter(100 + 60 - roundNum(width));
+            //width 60: 90 good
+            //width 70: 
+        } else {
+            setShooter(90);
         }
+            //automatic set shooter
+        
 
     } 
     else {
@@ -42,21 +46,27 @@ void setShootMotor(){
       
 }
 
-int alignRobot(pros::vision_object_s_t object_arr[1]){
+int alignRobot(){
+    pros::vision_object_s_t object_arr[1];
+    vision_sensor.read_by_sig(0, 1 ? isRed : 2, 1, object_arr);
+
     pros::vision_object_s_t high_goal = object_arr[0];
 
+    int dist = findDist();
+
     pros::lcd::set_text(3, std::to_string(high_goal.width));
-    pros::lcd::set_text(4, std::to_string(high_goal.width));
+    pros::lcd::set_text(4, std::to_string(dist));
+    pros::lcd::set_text(7, std::to_string(high_goal.left_coord));
     pros::lcd::set_text(5, std::to_string(high_goal.x_middle_coord));
     pros::lcd::set_text(6, std::to_string(high_goal.y_middle_coord));
 
     std::cout << high_goal.signature << std::endl;
     //high goal not blue or red
-    if (high_goal.signature != 1 && high_goal.signature != 2) return;
+    if (high_goal.signature != 1 && high_goal.signature != 2) return -1;
 
     std::cout << high_goal.left_coord << std::endl;
 
-    if (high_goal.signature == 1){
+    if (high_goal.signature == 1 && isRed){
         //red
         std::cout<<high_goal.left_coord << std::endl;
         if (high_goal.left_coord > 110){
@@ -85,8 +95,10 @@ int alignRobot(pros::vision_object_s_t object_arr[1]){
             setDrive(0, 0);
         }
     }
-    else {
+    else if (high_goal.signature == 2 && !isRed) {
         //blue
+
+
     }
 
    // 
@@ -96,4 +108,10 @@ int alignRobot(pros::vision_object_s_t object_arr[1]){
 
 int findDist(){
     return distance_sensor.get();
+}
+
+int roundNum(int num)
+{
+     int rem = num % 10;
+     return rem >= 5 ? (num - rem + 10) : (num - rem);
 }

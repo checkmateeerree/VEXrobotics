@@ -44,12 +44,12 @@ void setDriveMotors() {
     if (abs(rightJoystick) < 10)
         rightJoystick = 0;
 	
-	if (leftButton > 0){
-		//leftward
-		setHorizDrive(80, -80, 80, -80);
-	} else if (rightButton > 0){
+	if (rightButton > 0){
 		//rightward
-		setHorizDrive(-80, 80, -80, 80);
+		setHorizDrive(80, -80, -80, 80);
+	} else if (leftButton > 0){
+		//leftward
+		setHorizDrive(-80, 80, 80, -80);
 
 	}
 	else {
@@ -109,11 +109,11 @@ void translateHorizontal(int units, int voltage){
 		double rotation = imu_sensor.get_rotation();
 		if (direction == 1){
 			//left
-			setHorizDrive(voltage + rotation, -voltage + rotation, voltage - rotation, -voltage - rotation);
+			setHorizDrive(voltage + rotation, -voltage + rotation, -voltage - rotation, voltage - rotation);
 
 		} else {
 			//right
-			setHorizDrive(-voltage + rotation, voltage + rotation, -voltage - rotation, voltage - rotation);
+			setHorizDrive(-voltage + rotation, voltage + rotation, voltage - rotation, -voltage - rotation);
 		}
 		pros::delay(10);
 	}

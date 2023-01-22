@@ -92,6 +92,7 @@ void competition_initialize() {
 
 void autonShoot(){
 	//shoots two discs into low goal
+	alignRobot();
 	setShooter(127);
 	pros::delay(2500);
 	for (int i = 0; i < 2; i++){
@@ -111,8 +112,8 @@ void spinRoller(){
 	//translate(300, 70);
 	pros::delay(100);
 	//spin roller
-	setIntake(-127);
-	pros::delay(1000);
+	setIntake(-80);
+	pros::delay(2000);
 	setIntake(0);
 
 	setDrive(0, 0);
@@ -121,6 +122,7 @@ void spinRoller(){
 
 
 void blueLeftCorner(){
+	isRed = false;
 	//robot allowed to be in front of roller
 	//permute to roller
 	spinRoller();
@@ -138,6 +140,7 @@ void blueLeftCorner(){
 }
 
 void redRightCorner(){
+	isRed = true;
 	autonShoot();
 
 	pros::delay(100);
@@ -151,6 +154,7 @@ void redRightCorner(){
 }
 
 void redLeftCorner(){
+	isRed = true;
 	//robot allowed to be in front of roller
 	//permute to roller
 	spinRoller();
@@ -169,6 +173,7 @@ void redLeftCorner(){
 }
 
 void blueRightCorner(){
+	isRed = false;
 	autonShoot();
 
 	pros::delay(100);
@@ -185,8 +190,8 @@ void blueRightCorner(){
 void autonomous() {
 	//redLeftCorner();
 	//redRightCorner();
-	blueRightCorner();
-	//blueLeftCorner();
+	//blueRightCorner();
+	blueLeftCorner();
 
 	/*pros::ADIDigitalOut piston ('H');
 

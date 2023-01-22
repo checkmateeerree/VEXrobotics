@@ -21,3 +21,4 @@ extern pros::Imu imu_sensor;
 extern pros::Vision vision_sensor;
 extern pros::Optical optical_sensor;
 extern pros::Distance distance_sensor;
+extern bool isRed;

@@ -29,3 +29,4 @@ pros::Imu imu_sensor(IMU_PORT);
 pros::Vision vision_sensor(VISION_PORT);
 pros::Optical optical_sensor(OPTICAL_PORT);
 pros::Distance distance_sensor(DISTANCE_PORT);
+bool isRed = false;

@@ -46,10 +46,10 @@ void setDriveMotors() {
 	
 	if (rightButton > 0){
 		//rightward
-		setHorizDrive(80, -80, -80, 80);
+		setHorizDrive(90, -100, -90, 100);
 	} else if (leftButton > 0){
 		//leftward
-		setHorizDrive(-80, 80, 80, -80);
+		setHorizDrive(-100, 90, 100, -90);
 
 	}
 	else {
@@ -85,7 +85,7 @@ void translate(int units, int voltage) {
 			setDrive(voltage * direction - rotation, voltage * direction + rotation);
 		} else {
 			//backward
-			setDrive(voltage * direction + rotation, voltage * direction - rotation);
+			setDrive(voltage * direction - rotation, voltage * direction + rotation);
 		}
 		
 		pros::delay(10);
@@ -108,11 +108,11 @@ void translateHorizontal(int units, int voltage){
 	while (avgDriveEncoderValue() < abs(units)){
 		double rotation = imu_sensor.get_rotation();
 		if (direction == 1){
-			//left
+			//right
 			setHorizDrive(voltage + rotation, -voltage + rotation, -voltage - rotation, voltage - rotation);
 
 		} else {
-			//right
+			//left
 			setHorizDrive(-voltage + rotation, voltage + rotation, voltage - rotation, -voltage - rotation);
 		}
 		pros::delay(10);

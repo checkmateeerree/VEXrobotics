@@ -29,6 +29,9 @@ void initialize() {
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "yo whats good");
 
+
+	//
+	//pros::ADIDigitalOut piston ('H');
 	driveLeftBack.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 	driveLeftFront.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 	driveRightBack.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
@@ -46,9 +49,9 @@ void initialize() {
 	pros::vision_signature_s_t RED_SIG = 
 		pros::Vision::signature_from_utility(1, 7631, 10241, 8936, -1921, -353, -1138, 3.000, 0);
 	pros::vision_signature_s_t BLUE_SIG = 
-		pros::Vision::signature_from_utility(2, -2897, -1939, -2418, 10493, 13335, 11914, 3.000, 0);
+		pros::Vision::signature_from_utility(2, -2383, -717, -1550, 4885, 9151, 7018, 1.000, 0);
 	pros::vision_signature_s_t YELLOW_SIG = 
-		pros::Vision::signature_from_utility(3, 1655, 2063, 1859, -4605, -4257, -4431, 3.000, 0);
+		pros::Vision::signature_from_utility(3, 1761, 2361, 2061, -4491, -3969, -4230, 3.000, 0);
 	//vision::signature SIG_1 (1, 7631, 10241, 8936, -1921, -353, -1138, 3.000, 0); vision::signature SIG_2 (2, -2897, -1939, -2418, 10493, 13335, 11914, 3.000, 0); vision::signature SIG_3 (3, 1655, 2063, 1859, -4605, -4257, -4431, 3.000, 0); vision::signature SIG_4 (4, 0, 0, 0, 0, 0, 0, 3.000, 0); vision::signature SIG_5 (5, 0, 0, 0, 0, 0, 0, 3.000, 0); vision::signature SIG_6 (6, 0, 0, 0, 0, 0, 0, 3.000, 0); vision::signature SIG_7 (7, 0, 0, 0, 0, 0, 0, 3.000, 0); vex::vision vision1 ( vex::PORT1, 50, SIG_1, SIG_2, SIG_3, SIG_4, SIG_5, SIG_6, SIG_7 );
 
 	vision_sensor.set_signature(1, &RED_SIG);
@@ -94,26 +97,49 @@ void autonShoot(){
 	//shoots two discs into low goal
 	alignRobot();
 	setShooter(127);
-	pros::delay(2500);
+	pros::delay(3500);
 	for (int i = 0; i < 2; i++){
-		setShifter(70);
+		setShifter(127);
 		pros::delay(300);
 		setShifter(-70);
-		pros::delay(300);
+		alignRobot();
+		pros::delay(500);
+		
 	}
 	setShooter(0);
 	setShifter(0);
 }
 
-void spinRoller(){
+void spinRoller(int time){
 	//spins the roller 
 
 	setDrive(50, 50);
 	//translate(300, 70);
 	pros::delay(100);
-	//spin roller
-	setIntake(-80);
-	pros::delay(2000);
+
+	setIntake(-100);
+
+	/*double hue_value = optical_sensor.get_hue();
+        std::cout << hue_value << std::endl;
+        setDrive(50, 50);
+        if ((hue_value > 20) && (hue_value < 210 || hue_value > 220)){
+            setIntake(-90);
+        }
+        if (isRed){
+            while(hue_value > 20){
+                hue_value = optical_sensor.get_hue();
+                pros::delay(10);
+            }
+        }
+        else{
+            while(hue_value < 210 || hue_value > 220){
+                hue_value = optical_sensor.get_hue();
+                pros::delay(10);
+            }
+        }
+*/
+	pros::delay(time);
+	
 	setIntake(0);
 
 	setDrive(0, 0);
@@ -125,31 +151,37 @@ void blueLeftCorner(){
 	isRed = false;
 	//robot allowed to be in front of roller
 	//permute to roller
-	spinRoller();
-	pros::delay(10);
+	spinRoller(200);
 	//back up
 	translate(-100, 70);
 	pros::delay(50);
 	//rotate it
-	rotate(90, 60);
+	//rotate(-90, 60);
 	translate(-200, 70);
+	pros::delay(100);
+	translateHorizontal(-1000, 80);
+	pros::delay(100);
+	translate(-300, 80);
+	pros::delay(100);
+
+	rotate(-30, 80);
 
 	autonShoot();
+
 	//translateHorizontal(500, 50);
+	
 	//positive is left, negative is right
 }
 
 void redRightCorner(){
 	isRed = true;
-	autonShoot();
-
-	pros::delay(100);
-	rotate(90, 60);
-
-	pros::delay(100);
 	translateHorizontal(-1000, 80);
 	pros::delay(300);
-	spinRoller();
+	spinRoller(200);
+	translate(-300, 80);
+	autonShoot();
+
+	
 	//setIntake(100);
 }
 
@@ -157,13 +189,20 @@ void redLeftCorner(){
 	isRed = true;
 	//robot allowed to be in front of roller
 	//permute to roller
-	spinRoller();
+	spinRoller(200);
 	//back up
 	translate(-100, 70);
 	pros::delay(50);
 	//rotate it
-	rotate(90, 60);
+	//rotate(-90, 60);
 	translate(-200, 70);
+	pros::delay(100);
+	translateHorizontal(-1000, 80);
+	pros::delay(100);
+	translate(-300, 80);
+	pros::delay(100);
+
+	rotate(-30, 80);
 
 	autonShoot();
 
@@ -182,7 +221,54 @@ void blueRightCorner(){
 	pros::delay(100);
 	translateHorizontal(-1000, 80);
 	pros::delay(300);
-	spinRoller();
+	spinRoller(200);
+
+}
+
+void progSkills() {
+	isRed = true;
+	redLeftCorner();
+	
+	pros::delay(300);
+
+	//get second roller
+	translate(-200, 80);
+	rotate(105, 80);
+
+	translate(2500, 80);
+
+	spinRoller(300);
+	pros::delay(300);
+
+	translate(-1000, 80);
+	pros::delay(100);
+	rotate(-55, 80);
+	pros::delay(100);
+
+	//go to other side of field
+	translate(-10000, 100);
+	pros::delay(100);
+	translate(1000, 100);
+	pros::delay(100);
+	rotate(120, 80);
+
+	translate(1000, 80);
+	spinRoller(300);
+
+	translate(-1200, 80);
+
+	rotate(105, 80);
+	translate(1000, 80);
+	spinRoller(300);
+	
+	//if more time intake more discs and shoot
+
+
+
+/*	piston1.set_value(true);
+	piston2.set_value(true);
+	pros::delay(1000);*/
+
 
 }
 
@@ -191,6 +277,10 @@ void autonomous() {
 	//redLeftCorner();
 	//redRightCorner();
 	//blueRightCorner();
+	//blueLeftCorner();
+
+	//translateHorizontal(-2000, 80);
+
 	blueLeftCorner();
 
 	/*pros::ADIDigitalOut piston ('H');
@@ -214,15 +304,24 @@ void autonomous() {
  * If the robot is disabled or communications is lost, the
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
- */
+ */ 	
 void opcontrol() {
 	//autonomous();
 	
 	while (true){
+		
+
+
 		setDriveMotors();
 		setIntakeMotors();
 		setShootMotor();
 		setShiftMotor();
+
+		if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y) > 0 && controller.get_digital(DIGITAL_R1)){
+			piston1.set_value(true);
+			piston2.set_value(true);
+			translate(1000, 80);
+		}
 
 		pros::delay(10);
 		//pros::delay(1000);

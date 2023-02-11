@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "hello",
+    "project_name": "prog skills",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -166,6 +166,8 @@
         "version": "3.7.2"
       }
     },
-    "upload_options": {}
+    "upload_options": {
+      "slot": 3
+    }
   }
 }

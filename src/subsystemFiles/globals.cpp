@@ -9,7 +9,7 @@
 #define DRIVE_RIGHT_FRONT_PORT 8
 #define IMU_PORT 10
 #define VISION_PORT 20
-#define OPTICAL_PORT 12
+#define OPTICAL_PORT 17
 #define DISTANCE_PORT 19
 
 //MOTORS
@@ -29,4 +29,6 @@ pros::Imu imu_sensor(IMU_PORT);
 pros::Vision vision_sensor(VISION_PORT);
 pros::Optical optical_sensor(OPTICAL_PORT);
 pros::Distance distance_sensor(DISTANCE_PORT);
+pros::ADIDigitalOut piston1 ('A');
+pros::ADIDigitalOut piston2 ('H');
 bool isRed = false;

@@ -13,6 +13,7 @@ void setShootMotor(){
     //bottom trigger intakes, top trigger outtakes
     int buttonVal = controller.get_digital(pros::E_CONTROLLER_DIGITAL_X);
     int shooterPower = 90 * (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1));
+    int alignButton = controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP);
 
     if (buttonVal > 0 && isToggled){
         //if button is being pressed and
@@ -23,42 +24,32 @@ void setShootMotor(){
         //and toggle is not true
         isToggled = true;
     }
+
+    if (alignButton > 0){
+        //cout << "hji" << endl;
+        alignRobot();
+    }
+    
     if (isToggled || shooterPower > 0){
-        //setShooter(90);
-
-        int width = alignRobot();
-        int dist = findDist();
-
-        if (width != -1){
-            setShooter(100 + 60 - roundNum(width));
-            //width 60: 90 good
-            //width 70: 
-        } else {
-            setShooter(90);
-        }
-            //automatic set shooter
-        
-
+        //try detect blue
+        setShooter(127);
     } 
     else {
         setShooter(0);
     }
-      
 }
 
 int alignRobot(){
-    pros::vision_object_s_t object_arr[1];
-    vision_sensor.read_by_sig(0, 1 ? isRed : 2, 1, object_arr);
+    int sigToRead = -1;
+    if (isRed) sigToRead = 1;
+    else sigToRead = 2;
+    pros::vision_object_s_t high_goal = vision_sensor.get_by_sig(0, sigToRead);
 
-    pros::vision_object_s_t high_goal = object_arr[0];
-
-    int dist = findDist();
-
+    pros::lcd::set_text(2, std::to_string(sigToRead));
     pros::lcd::set_text(3, std::to_string(high_goal.width));
-    pros::lcd::set_text(4, std::to_string(dist));
-    pros::lcd::set_text(7, std::to_string(high_goal.left_coord));
-    pros::lcd::set_text(5, std::to_string(high_goal.x_middle_coord));
-    pros::lcd::set_text(6, std::to_string(high_goal.y_middle_coord));
+    pros::lcd::set_text(5, std::to_string(high_goal.signature));
+    pros::lcd::set_text(4, std::to_string(high_goal.left_coord));
+    pros::lcd::set_text(6, std::to_string(high_goal.height));
 
     std::cout << high_goal.signature << std::endl;
     //high goal not blue or red
@@ -69,25 +60,23 @@ int alignRobot(){
     if (high_goal.signature == 1 && isRed){
         //red
         std::cout<<high_goal.left_coord << std::endl;
-        if (high_goal.left_coord > 110){
+        if (high_goal.left_coord > 135){
             //too far left
             setDrive(40, -40);
             
-            while (high_goal.left_coord > 110){
-                vision_sensor.read_by_size(0, 1, object_arr);
-                high_goal = object_arr[0];
+            while (high_goal.left_coord > 135){
+                high_goal = vision_sensor.get_by_sig(0, sigToRead);
                 pros::delay(10);
             }
             //beat coast
             setDrive(-10, 10);
             pros::delay(100);
             setDrive(0, 0);
-        } else if (high_goal.left_coord < 90){
+        } else if (high_goal.left_coord < 125){
             //too far right
             setDrive(-40, 40);
-            while (high_goal.left_coord < 90){
-                vision_sensor.read_by_size(0, 1, object_arr);
-                high_goal = object_arr[0];
+            while (high_goal.left_coord < 125){
+                high_goal = vision_sensor.get_by_sig(0, sigToRead);
                 pros::delay(10);
             }
             setDrive(10, -10);
@@ -95,9 +84,34 @@ int alignRobot(){
             setDrive(0, 0);
         }
     }
+
+    
     else if (high_goal.signature == 2 && !isRed) {
         //blue
-
+        pros::lcd::set_text(0, "is blue");
+        if (high_goal.left_coord > 140){
+            //too far left
+            setDrive(40, -40);
+            
+            while (high_goal.left_coord > 140){
+                high_goal = vision_sensor.get_by_sig(0, sigToRead);
+                pros::delay(10);
+            }
+            //beat coast
+            setDrive(10, -10);
+            pros::delay(100);
+            setDrive(0, 0);
+        } else if (high_goal.left_coord < 120){
+            //too far right
+            setDrive(-40, 40);
+            while (high_goal.left_coord < 120){
+                high_goal = vision_sensor.get_by_sig(0, sigToRead);
+                pros::delay(10);
+            }
+            setDrive(10, -10);
+            pros::delay(100);
+            setDrive(0, 0);
+        }
 
     }
 

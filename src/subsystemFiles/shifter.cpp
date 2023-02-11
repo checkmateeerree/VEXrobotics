@@ -13,10 +13,10 @@ void setShiftMotor(){
 
     //automated shift
     if (abs(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) > 0) {
-        setShifter(90);
+        setShifter(127);
         //setShifter(0);
         pros::delay(100);
-        setShifter(-90);
+        setShifter(-127);
         pros::delay(100);
     }
 }

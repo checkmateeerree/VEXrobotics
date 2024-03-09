@@ -40,11 +40,12 @@ void initialize() {
 	intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	//intakeRight.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	shifter.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-	shooter.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	shooter1.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	shooter2.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 
 	imu_sensor.reset();
 
-	vision_sensor.clear_led();
+	/*vision_sensor.clear_led();
 
 	pros::vision_signature_s_t RED_SIG = 
 		pros::Vision::signature_from_utility(1, 7631, 10241, 8936, -1921, -353, -1138, 3.000, 0);
@@ -57,7 +58,7 @@ void initialize() {
 	vision_sensor.set_signature(1, &RED_SIG);
 	vision_sensor.set_signature(2, &BLUE_SIG);
 	vision_sensor.set_signature(3, &YELLOW_SIG);
-	
+	*/
 	pros::delay(2000);
 }
 
@@ -95,14 +96,14 @@ void competition_initialize() {
 
 void autonShoot(){
 	//shoots two discs into low goal
-	alignRobot();
+	//alignRobot();
 	setShooter(127);
 	pros::delay(3500);
 	for (int i = 0; i < 2; i++){
 		setShifter(127);
 		pros::delay(300);
 		setShifter(-70);
-		alignRobot();
+		//alignRobot();
 		pros::delay(500);
 		
 	}
@@ -225,41 +226,28 @@ void blueRightCorner(){
 
 }
 
-void progSkills() {
-	isRed = true;
-	redLeftCorner();
+void progSkills(){
+
+/*
+	setIntake(127);
+	pros::delay(1000);
 	
-	pros::delay(300);
+	//pros::delay(3000);
+	setIntake(-127);
+	pros::delay(1000);
+	moveShooter(400, 100);
+	pros::delay(5000);
+	setIntake(127);*/
+
+	moveShooter(620, 100);
+	
+
 
 	//get second roller
-	translate(-200, 80);
-	rotate(105, 80);
+	//translate(-1200, 80);
+	
 
-	translate(2500, 80);
-
-	spinRoller(300);
-	pros::delay(300);
-
-	translate(-1000, 80);
-	pros::delay(100);
-	rotate(-55, 80);
-	pros::delay(100);
-
-	//go to other side of field
-	translate(-10000, 100);
-	pros::delay(100);
-	translate(1000, 100);
-	pros::delay(100);
-	rotate(120, 80);
-
-	translate(1000, 80);
-	spinRoller(300);
-
-	translate(-1200, 80);
-
-	rotate(105, 80);
-	translate(1000, 80);
-	spinRoller(300);
+	
 	
 	//if more time intake more discs and shoot
 
@@ -307,8 +295,8 @@ void autonomous() {
  */ 	
 void opcontrol() {
 	//autonomous();
-	
-	while (true){
+	progSkills();
+	/*while (true){
 		
 
 
@@ -325,6 +313,6 @@ void opcontrol() {
 
 		pros::delay(10);
 		//pros::delay(1000);
-	}
+	}*/
 }	
 

@@ -2,6 +2,7 @@
 #include "main.h"
 
 void setShooter(int power);
+void moveShooter(double units, int velocity);
 
 //DRIVER CONTROL FUNCTIONS
 void setShootMotor();

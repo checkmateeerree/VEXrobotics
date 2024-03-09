@@ -2,8 +2,17 @@
 
 //HELPER FUNCTIONS
 void setShooter(int power){
-    shooter = power;
-    //shooter2 = power;
+    shooter1 = power;
+    shooter2 = power;
+}
+
+void moveShooter(double units, int power){
+    shooter1.move_absolute(units,power); // Moves 100 units forward
+    shooter2.move_absolute(units,power);
+    while (!((shooter1.get_position() < units + 5) && (shooter1.get_position() > units - 5))) {
+        // Continue running this loopn as long as the motor is not within +-5 units of its goal
+        pros::delay(2);
+    }
 }
 
 bool isToggled = false;
@@ -25,10 +34,10 @@ void setShootMotor(){
         isToggled = true;
     }
 
-    if (alignButton > 0){
+   /* if (alignButton > 0){
         //cout << "hji" << endl;
         alignRobot();
-    }
+    }*/
     
     if (isToggled || shooterPower > 0){
         //try detect blue
@@ -38,7 +47,7 @@ void setShootMotor(){
         setShooter(0);
     }
 }
-
+/*
 int alignRobot(){
     int sigToRead = -1;
     if (isRed) sigToRead = 1;
@@ -120,6 +129,7 @@ int alignRobot(){
 
 }
 
+*/
 int findDist(){
     return distance_sensor.get();
 }

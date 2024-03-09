@@ -4,7 +4,8 @@
 
 //MOOTRS
 extern pros::Motor shifter;
-extern pros::Motor shooter;
+extern pros::Motor shooter1;
+extern pros::Motor shooter2;
 extern pros::Motor intake;
 //extern pros::Motor intakeRight;
 extern pros::Motor driveLeftBack;

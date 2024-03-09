@@ -1,20 +1,23 @@
 #include "main.h"
 
-#define SHIFTER_PORT 1
-#define SHOOTER_PORT 2
-#define INTAKE_PORT 3
-#define DRIVE_LEFT_BACK_PORT 5
-#define DRIVE_LEFT_FRONT_PORT 6
-#define DRIVE_RIGHT_BACK_PORT 7
-#define DRIVE_RIGHT_FRONT_PORT 8
-#define IMU_PORT 10
+#define SHIFTER_PORT 20
+#define SHOOTER1_PORT 9
+#define SHOOTER2_PORT 10
+#define INTAKE_PORT 4
+#define DRIVE_LEFT_BACK_PORT 7
+#define DRIVE_LEFT_FRONT_PORT 5
+#define DRIVE_RIGHT_BACK_PORT 8
+#define DRIVE_RIGHT_FRONT_PORT 6
+
 #define VISION_PORT 20
 #define OPTICAL_PORT 17
 #define DISTANCE_PORT 19
+#define IMU_PORT 1
 
 //MOTORS
 pros::Motor shifter(SHIFTER_PORT, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_COUNTS);
-pros::Motor shooter(SHOOTER_PORT, MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
+pros::Motor shooter1(SHOOTER1_PORT, MOTOR_GEAR_RED, false, pros::E_MOTOR_ENCODER_COUNTS);
+pros::Motor shooter2(SHOOTER2_PORT, MOTOR_GEAR_RED, true, pros::E_MOTOR_ENCODER_COUNTS);
 pros::Motor intake(INTAKE_PORT, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_COUNTS);
 //pros::Motor intakeRight(4, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_COUNTS);
 pros::Motor driveLeftBack(DRIVE_LEFT_BACK_PORT, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_COUNTS);

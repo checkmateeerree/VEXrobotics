@@ -3,6 +3,7 @@
 
 void setShooter(int power);
 void moveShooter(double units, int velocity);
+void setShooterDown();
 
 //DRIVER CONTROL FUNCTIONS
 void setShootMotor();

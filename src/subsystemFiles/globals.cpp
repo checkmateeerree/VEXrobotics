@@ -1,18 +1,19 @@
 #include "main.h"
 
-#define SHIFTER_PORT 20
-#define SHOOTER1_PORT 9
+#define SHIFTER_PORT 18
+#define SHOOTER1_PORT 3
 #define SHOOTER2_PORT 10
 #define INTAKE_PORT 4
 #define DRIVE_LEFT_BACK_PORT 7
 #define DRIVE_LEFT_FRONT_PORT 5
+
 #define DRIVE_RIGHT_BACK_PORT 8
 #define DRIVE_RIGHT_FRONT_PORT 6
 
 #define VISION_PORT 20
-#define OPTICAL_PORT 17
+#define OPTICAL_PORT 13
 #define DISTANCE_PORT 19
-#define IMU_PORT 1
+#define IMU_PORT 2
 
 //MOTORS
 pros::Motor shifter(SHIFTER_PORT, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_COUNTS);

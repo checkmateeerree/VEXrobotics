@@ -1,6 +1,7 @@
 #include "main.h"
+#include <string.h>
 
-//HELPER FUNCTIONS
+2//HELPER FUNCTIONS
 void setShooter(int power){
     shooter1 = power;
     shooter2 = power;
@@ -12,6 +13,21 @@ void moveShooter(double units, int power){
     while (!((shooter1.get_position() < units + 5) && (shooter1.get_position() > units - 5))) {
         // Continue running this loopn as long as the motor is not within +-5 units of its goal
         pros::delay(2);
+    }
+}
+
+void setShooterDown(){
+    double rgb_value;
+    setShooter(70);
+    while (true){
+        rgb_value = optical_sensor.get_hue();
+        pros::lcd::set_text(2, std::to_string(rgb_value));
+        if (rgb_value <= 50){
+           pros::delay(100);
+            setShooter(10);
+            break;
+        } 
+        pros::delay(20);
     }
 }
 

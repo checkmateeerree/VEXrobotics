@@ -226,20 +226,33 @@ void blueRightCorner(){
 
 }
 
+
+
 void progSkills(){
 
-/*
-	setIntake(127);
+//moveShooter(800, 70);
+	//translate(-300, 50);
+
+    setIntake(77);
 	pros::delay(1000);
+	setShooterDown();
 	
 	//pros::delay(3000);
 	setIntake(-127);
-	pros::delay(1000);
-	moveShooter(400, 100);
-	pros::delay(5000);
-	setIntake(127);*/
+	pros::delay(3000);
+	
+	
+	translate(-4700, 50);
+	pros::delay(3000);
+	setIntake(100);
+	pros::delay(3000);
+	
 
-	moveShooter(620, 100);
+	setShooter(-127);
+	
+
+	//moveShooter(800, 100);
+	
 	
 
 

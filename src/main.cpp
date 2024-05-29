@@ -44,6 +44,7 @@ void initialize() {
 	shooter2.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 
 	imu_sensor.reset();
+	rotation_sensor.reset_position();
 
 	/*vision_sensor.clear_led();
 
@@ -230,46 +231,35 @@ void blueRightCorner(){
 
 void progSkills(){
 
-//moveShooter(800, 70);
-	//translate(-300, 50);
+	while (true){
+		setIntake(127);
+		pros::delay(500);
+		setIntake(0);
+		setShooterDown();
 
-    setIntake(77);
-	pros::delay(1000);
-	setShooterDown();
-	
-	//pros::delay(3000);
-	setIntake(-127);
-	pros::delay(3000);
-	
-	
-	translate(-4700, 50);
-	pros::delay(3000);
-	setIntake(100);
-	pros::delay(3000);
-	
+		
+		setIntake(-100);
+		pros::delay(1300);
+		
+		
+		//translate(-4700, 50);
+		setIntake(127);
+		pros::delay(500);
+		setIntake(0);
+		
 
-	setShooter(-127);
-	
+		setShooter(127);
+		pros::delay(750);
+		setShooter(0);
 
-	//moveShooter(800, 100);
-	
-	
-
-
-	//get second roller
-	//translate(-1200, 80);
+		setShooterDown();
+		setIntake(-80);
+		pros::delay(2000);
+	}
 	
 
-	
-	
-	//if more time intake more discs and shoot
 
-
-
-/*	piston1.set_value(true);
-	piston2.set_value(true);
-	pros::delay(1000);*/
-
+	//setShooter(127);
 
 }
 

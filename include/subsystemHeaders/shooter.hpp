@@ -2,6 +2,7 @@
 #include "main.h"
 
 void setShooter(int power);
+void brakeShooter();
 void moveShooter(double units, int velocity);
 void setShooterDown();
 

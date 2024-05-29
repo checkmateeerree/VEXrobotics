@@ -14,6 +14,7 @@
 #define OPTICAL_PORT 13
 #define DISTANCE_PORT 19
 #define IMU_PORT 2
+#define ROTATION_PORT 11
 
 //MOTORS
 pros::Motor shifter(SHIFTER_PORT, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_COUNTS);
@@ -33,6 +34,7 @@ pros::Imu imu_sensor(IMU_PORT);
 pros::Vision vision_sensor(VISION_PORT);
 pros::Optical optical_sensor(OPTICAL_PORT);
 pros::Distance distance_sensor(DISTANCE_PORT);
+pros::Rotation rotation_sensor(ROTATION_PORT);
 pros::ADIDigitalOut piston1 ('A');
 pros::ADIDigitalOut piston2 ('H');
 bool isRed = false;

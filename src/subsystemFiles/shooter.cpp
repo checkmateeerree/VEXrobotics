@@ -1,10 +1,14 @@
 #include "main.h"
 #include <string.h>
 
-2//HELPER FUNCTIONS
+//HELPER FUNCTIONS
 void setShooter(int power){
     shooter1 = power;
     shooter2 = power;
+}
+void brakeShooter(){
+    shooter1.brake();
+    shooter2.brake();
 }
 
 void moveShooter(double units, int power){
@@ -17,18 +21,33 @@ void moveShooter(double units, int power){
 }
 
 void setShooterDown(){
-    double rgb_value;
-    setShooter(70);
-    while (true){
+    //double degrees_rotated;
+    double position;
+    setShooter(80);
+    /*while (true){
         rgb_value = optical_sensor.get_hue();
         pros::lcd::set_text(2, std::to_string(rgb_value));
         if (rgb_value <= 50){
            pros::delay(100);
-            setShooter(10);
-            break;
+           brakeShooter();
+           break;
+        } 
+        pros::delay(20);
+    }*/
+
+    while (true){
+       // degrees_rotated = rotation_sensor.get_angle();
+        position = rotation_sensor.get_position();
+       // pros::lcd::set_text(2, std::to_string(degrees_rotated));
+        pros::lcd::set_text(4, std::to_string(position));
+       if (position <= 200){
+          // pros::delay(100);
+           brakeShooter();
+           break;
         } 
         pros::delay(20);
     }
+
 }
 
 bool isToggled = false;
